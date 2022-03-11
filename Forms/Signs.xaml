@@ -1,0 +1,46 @@
+﻿<Window x:Class="OP1.Forms.Signs"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OP1.Forms"
+        mc:Ignorable="d"
+        Title="Указать подписи" MinHeight="200" Width="500">
+    <Window.Resources>
+        <Style TargetType="{x:Type Label}" >
+            <Setter Property="Width" Value="180"></Setter>
+        </Style>
+        <Style TargetType="{x:Type TextBox}" >
+            <Setter Property="Width" Value="240"></Setter>
+            <Setter Property="Height" Value="24"></Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition MinHeight="60"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Label MinWidth="400" FontSize="16"  >Укажите ФИО лиц, ответственных за калькуляцию</Label>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Label  Content="Калькуляцию составил" HorizontalAlignment="Left" Margin="40,10,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="Sostavitel"></TextBox>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <Label Content="Заведующий производством" HorizontalAlignment="Left" Margin="40,10,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="Zaveduushiy"></TextBox>
+        </StackPanel>
+        <StackPanel Grid.Row="3" Orientation="Horizontal">
+            <Label Content="Руководитель организации" HorizontalAlignment="Left" Margin="40,10,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="Rukovoditel"></TextBox>
+        </StackPanel>
+        <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="20,10,20,10" HorizontalAlignment="Right">
+            <Button x:Name="Cansel" Style="{StaticResource SimpleButton}">Отменить</Button>
+            <Button x:Name="Ok" Style="{StaticResource SimpleButton}">Сохранить</Button>
+        </StackPanel>
+
+    </Grid>
+</Window>
