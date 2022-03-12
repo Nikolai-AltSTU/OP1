@@ -11,8 +11,8 @@ Database: SQLite 3.32
 
 CREATE TABLE Card
 (
-  CardPK int NOT NULL
-        CONSTRAINT CardPK PRIMARY KEY AUTOINCREMENT,
+  CardPK INTEGER NOT NULL
+        CONSTRAINT PK_Card PRIMARY KEY,
   OrganizationName TEXT,
   SubOrganization TEXT,
   DishName TEXT,
@@ -22,8 +22,7 @@ CREATE TABLE Card
   DishNumber TEXT,
   OperName TEXT,
   DocNumber TEXT,
-  DateOfDoc datetime,
-  CONSTRAINT CardPK UNIQUE (CardPK)
+  DateOfDoc datetime
 )
 ;
 
@@ -31,21 +30,20 @@ CREATE TABLE Card
 
 CREATE TABLE Product
 (
-  ProductPK int NOT NULL
-        CONSTRAINT ProductPK PRIMARY KEY AUTOINCREMENT,
+  ProductPK INTEGER NOT NULL
+        CONSTRAINT PK_Product PRIMARY KEY,
   NameProd TEXT,
   Code int,
   Number int,
-  CardPK int NOT NULL,
-  CONSTRAINT ProductPK UNIQUE (ProductPK),
-  CONSTRAINT CardToProduct
+  CardPK INTEGER,
+  CONSTRAINT Relationship3
     FOREIGN KEY (CardPK)
     REFERENCES Card (CardPK)
       ON DELETE RESTRICT
 )
 ;
 
-CREATE INDEX IX_CardToProduct
+CREATE INDEX IX_Relationship3
   ON Product (CardPK)
 ;
 
@@ -53,8 +51,8 @@ CREATE INDEX IX_CardToProduct
 
 CREATE TABLE Calculation
 (
-  CalcPK int NOT NULL
-        CONSTRAINT CalcPK PRIMARY KEY AUTOINCREMENT,
+  CalcPK INTEGER NOT NULL
+        CONSTRAINT PK_Calculation PRIMARY KEY,
   numberCalc int,
   dateCalc datetime,
   DishWeght float,
@@ -63,13 +61,12 @@ CREATE TABLE Calculation
   Zaveduushiy TEXT,
   Sostavitel TEXT,
   Rukovoditel TEXT,
-  CardPK int NOT NULL,
-  CONSTRAINT PK_Calculation PRIMARY KEY (CalcPK,CardPK),
-  CONSTRAINT CalcPK UNIQUE (CalcPK),
-  CONSTRAINT CardToCalc
+  CardPK INTEGER NOT NULL,
+  --CONSTRAINT PK_Calculation PRIMARY KEY (CalcPK,CardPK),
+  CONSTRAINT Relationship1
     FOREIGN KEY (CardPK)
     REFERENCES Card (CardPK)
-      ON DELETE RESTRICT
+      ON DELETE CASCADE
 )
 ;
 
@@ -80,22 +77,24 @@ CREATE TABLE ProdCalc
   Norma float,
   price int,
   summa int,
-  CalcFPK int NOT NULL,
-  CardFPK int NOT NULL,
-  ProductPK int NOT NULL,
-  CONSTRAINT PK_ProdCalc PRIMARY KEY (CalcFPK,CardFPK),
-  CONSTRAINT CalcToProdCalc
-    FOREIGN KEY (CalcFPK, CardFPK)
+  ProdCalsPK INTEGER NOT NULL
+        CONSTRAINT PK_ProdCalc PRIMARY KEY,
+  CalcPK INTEGER NOT NULL,
+  CardPK INTEGER NOT NULL,
+  ProductPK INTEGER,
+  --CONSTRAINT PK_ProdCalc PRIMARY KEY (ProdCalsPK,CalcPK,CardPK),
+  CONSTRAINT Relationship2
+    FOREIGN KEY (CalcPK, CardPK)
     REFERENCES Calculation (CalcPK, CardPK)
       ON DELETE CASCADE,
-  CONSTRAINT ProdToProdCalc
+  CONSTRAINT Relationship4
     FOREIGN KEY (ProductPK)
     REFERENCES Product (ProductPK)
       ON DELETE RESTRICT
 )
 ;
 
-CREATE INDEX IX_ProdToProdCalc
+CREATE INDEX IX_Relationship4
   ON ProdCalc (ProductPK)
 ;
 

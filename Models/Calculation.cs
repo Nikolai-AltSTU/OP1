@@ -7,14 +7,14 @@ namespace OP1.Models
     {
         public long CalcPk { get; set; }
         public long? NumberCalc { get; set; }
-        public byte[] DateCalc { get; set; }
-        public double? DishWeght { get; set; }
-        public long? ExtraChargePercent { get; set; }
-        public long? ExtraChargeMoney { get; set; }
+        public DateTime DateCalc { get; set; }
+        public double? DishWeght { get; set; } = 0;
+        public double? ExtraChargePercent { get; set; } = 0;
+        public long? ExtraChargeMoney { get; set; } = 0;
         public string Zaveduushiy { get; set; }
         public string Sostavitel { get; set; }
         public string Rukovoditel { get; set; }
-        public long? CardPk { get; set; }
+        public long CardPk { get; set; }
 
         public virtual Card CardPkNavigation { get; set; }
     }

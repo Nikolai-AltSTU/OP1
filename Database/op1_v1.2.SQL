@@ -11,7 +11,7 @@ Database: SQLite 3.32
 
 CREATE TABLE Card
 (
-  CardPK int NOT NULL
+  CardPK INTEGER NOT NULL
         CONSTRAINT CardPK PRIMARY KEY AUTOINCREMENT,
   OrganizationName TEXT,
   SubOrganization TEXT,
@@ -31,12 +31,12 @@ CREATE TABLE Card
 
 CREATE TABLE Product
 (
-  ProductPK int NOT NULL
+  ProductPK INTEGER NOT NULL
         CONSTRAINT ProductPK PRIMARY KEY AUTOINCREMENT,
   NameProd TEXT,
   Code int,
   Number int,
-  CardPK int NOT NULL,
+  CardPK INTEGER NOT NULL,
   CONSTRAINT ProductPK UNIQUE (ProductPK),
   CONSTRAINT CardToProduct
     FOREIGN KEY (CardPK)
@@ -53,7 +53,7 @@ CREATE INDEX IX_CardToProduct
 
 CREATE TABLE Calculation
 (
-  CalcPK int NOT NULL
+  CalcPK INTEGER NOT NULL
         CONSTRAINT CalcPK PRIMARY KEY AUTOINCREMENT,
   numberCalc int,
   dateCalc datetime,
@@ -63,14 +63,17 @@ CREATE TABLE Calculation
   Zaveduushiy TEXT,
   Sostavitel TEXT,
   Rukovoditel TEXT,
-  CardPK int NOT NULL,
-  CONSTRAINT PK_Calculation PRIMARY KEY (CalcPK,CardPK),
+  CardPK INTEGER NOT NULL,
   CONSTRAINT CalcPK UNIQUE (CalcPK),
   CONSTRAINT CardToCalc
     FOREIGN KEY (CardPK)
     REFERENCES Card (CardPK)
       ON DELETE RESTRICT
 )
+;
+
+CREATE INDEX IX_CardToCalc
+  ON Calculation (CardPK)
 ;
 
 -- Table ProdCalc
@@ -80,13 +83,11 @@ CREATE TABLE ProdCalc
   Norma float,
   price int,
   summa int,
-  CalcFPK int NOT NULL,
-  CardFPK int NOT NULL,
-  ProductPK int NOT NULL,
-  CONSTRAINT PK_ProdCalc PRIMARY KEY (CalcFPK,CardFPK),
+  CalcFPK INTEGER NOT NULL,
+  ProductPK INTEGER NOT NULL,
   CONSTRAINT CalcToProdCalc
-    FOREIGN KEY (CalcFPK, CardFPK)
-    REFERENCES Calculation (CalcPK, CardPK)
+    FOREIGN KEY (CalcFPK)
+    REFERENCES Calculation (CalcPK)
       ON DELETE CASCADE,
   CONSTRAINT ProdToProdCalc
     FOREIGN KEY (ProductPK)
@@ -97,5 +98,9 @@ CREATE TABLE ProdCalc
 
 CREATE INDEX IX_ProdToProdCalc
   ON ProdCalc (ProductPK)
+;
+
+CREATE INDEX IX_CalcToProdCalc
+  ON ProdCalc (CalcFPK)
 ;
 

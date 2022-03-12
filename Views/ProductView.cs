@@ -23,7 +23,7 @@ namespace OP1.Views
         public string Name { get { return product.NameProd; } set { product.NameProd = value; } }
 
         public long Code { get { return (long)product.Code; } set { product.Code = value; } }
-
+        
 
     }
 }

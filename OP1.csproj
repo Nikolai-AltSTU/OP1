@@ -22,28 +22,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="ModelOP1.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ModelOP1.Context.cs</LastGenOutput>
-    </None>
+	  <Folder Include="Data\" />
   </ItemGroup>
 
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="ModelOP1.Context.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ModelOP1.Context.tt</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-
 
 </Project>
