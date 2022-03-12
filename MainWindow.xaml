@@ -15,29 +15,30 @@
             <RowDefinition></RowDefinition>
             <RowDefinition MaxHeight="50" ></RowDefinition>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+        <StackPanel x:Name="HeadingStack" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" >
             <Label  Height="27">Номер документа</Label>
-            <TextBox Name="DocNumberTextBox" Style="{StaticResource placeHolder}"  Margin="10,10,20,10" Tag="Номер документа" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top"  MinWidth="100"/>
+            <TextBox Name="DocNumberTextBox" Text="{Binding DocNumber}" Style="{StaticResource placeHolder}"  Margin="10,10,20,10" Tag="Номер документа" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top"  MinWidth="100"/>
             <Label  Height="27">Дата составления</Label>
-            <DatePicker Name="DateOfDoc" Height="27" Margin="10,2,20,0"></DatePicker>
+            <DatePicker Name="DateOfDoc" SelectedDate="{Binding Path=DateOfDoc, StringFormat = {}{0:dd-MM-yyyy}}"
+                        Height="27" Margin="10,2,20,0"></DatePicker>
         </StackPanel>
-        <Border Grid.Row="1">
+        <Border Grid.Row="1" Name="CardBorder">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
-                    <TextBox x:Name="OrganizationNameTextBox" Style="{StaticResource placeHolder}" Tag="Организация" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" />
+                    <TextBox x:Name="OrganizationNameTextBox" Text="{Binding OrganizationName}" Style="{StaticResource placeHolder}" Tag="Организация" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" />
                     <Label Margin="150,2,-20,0" Height="27">Форма</Label>
-                    <TextBox x:Name="OKUDTextBox" Style="{StaticResource placeHolder}" Tag="по ОКУД" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="60" />
-                    <TextBox x:Name="OKPOTextBox" Style="{StaticResource placeHolder}" Tag="по ОКПО" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="60" />
+                    <TextBox x:Name="OKUDTextBox" Text="{Binding Okud}" Style="{StaticResource placeHolder}" Tag="по ОКУД" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="60" />
+                    <TextBox x:Name="OKPOTextBox" Text="{Binding Okpo}" Style="{StaticResource placeHolder}" Tag="по ОКПО" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="60" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBox x:Name="SubOrganizationTextBox" Style="{StaticResource placeHolder}" Tag="Структурное подразделение" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" />
+                    <TextBox x:Name="SubOrganizationTextBox" Text="{Binding SubOrganization}" Style="{StaticResource placeHolder}" Tag="Структурное подразделение" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" />
                     <Label Margin="150,2,-20,0" Height="27">Вид деятельности</Label>
-                    <TextBox x:Name="OKDPTextBox" Style="{StaticResource placeHolder}" Tag="по ОКДП" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="70" Width="90" />
+                    <TextBox x:Name="OKDPTextBox" Text="{Binding Okdp}" Style="{StaticResource placeHolder}" Tag="по ОКДП" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="70" Width="90" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBox x:Name="DishNameTextBox" Style="{StaticResource placeHolder}" Tag="Наименование блюда" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" />
-                    <TextBox x:Name="DishNumberTextBox" Style="{StaticResource placeHolder}" Tag="№ блюда по сборнику рецептур, ТТК, СТП" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="70" />
-                    <TextBox x:Name="OperationNameTextBox" Style="{StaticResource placeHolder}" Tag="Вид операции" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="70" />
+                    <TextBox x:Name="DishNameTextBox" Text="{Binding DishName}" Style="{StaticResource placeHolder}" Tag="Наименование блюда" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" />
+                    <TextBox x:Name="DishNumberTextBox" Text="{Binding DishNumber}" Style="{StaticResource placeHolder}" Tag="№ блюда по сборнику рецептур, ТТК, СТП" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="70" />
+                    <TextBox x:Name="OperationNameTextBox" Text="{Binding OperName}" Style="{StaticResource placeHolder}" Tag="Вид операции" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="70" />
                 </StackPanel>
             </StackPanel>
         </Border>
@@ -46,8 +47,12 @@
             
             <StackPanel Orientation="Horizontal">
                 <StackPanel Orientation="Vertical">
-                    <Label>Продукты</Label>
-                    <DataGrid x:Name="Products" CanUserAddRows="True">
+                    <StackPanel Orientation="Horizontal">
+                        <Label>Продукты</Label>
+                        <Button x:Name="AddProduct" Style="{StaticResource InlineButton}" Click="AddProduct_Click">Добавить</Button>
+                        <Button x:Name="RemProduct" Style="{StaticResource InlineButton}" Click="RemProduct_Click">Удалить</Button>
+                    </StackPanel>
+                    <DataGrid x:Name="ProductsDataGrid" CanUserAddRows="False" >
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="№" ></DataGridTemplateColumn>
                             <DataGridTextColumn  Header="Наименование" MinWidth="150"></DataGridTextColumn>
@@ -57,7 +62,19 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Vertical" Margin="2,0,0,0">
-                    <Label>Калькуляции</Label>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0">Калькуляции</Label>
+                        <StackPanel  Grid.Column="1" Orientation="Horizontal" Name="ButtonsStack">
+                            <Button>Добавить</Button>
+                        </StackPanel>
+                        <Button Grid.Column="2">+</Button>
+                    </Grid>
+
                     <DataGrid x:Name="Calculatons" CanUserAddRows="True">
                         <DataGrid.Columns>
                             <!--DataGridTemplateColumn Header="№" ></DataGridTemplateColumn-->
@@ -102,12 +119,12 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"></ColumnDefinition>
-                    <ColumnDefinition Width="6*"></ColumnDefinition>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="ApproveButton" Margin="5,5,5,5"  Style="{StaticResource SimpleButton}" Grid.Column="0" >Утвердить</Button>
+                <Button HorizontalAlignment="Left" x:Name="ApproveButton" Margin="5,5,5,5"  Style="{StaticResource SimpleButton}" Grid.Column="0" >Утвердить</Button>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  Grid.Column="1">
                     <Button x:Name="CancelButton"  Style="{StaticResource SimpleButton}">Отменить</Button>
-                    <Button x:Name="OkButton"  Style="{StaticResource SimpleButton}">Применить</Button>
+                    <Button x:Name="OkButton"  Style="{StaticResource SimpleButton}" Click="OkButton_Click">Применить</Button>
                 </StackPanel>
             </Grid>
         </Border>
