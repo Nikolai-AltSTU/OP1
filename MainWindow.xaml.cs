@@ -92,8 +92,8 @@ namespace OP1
                 return;
             };
             ProductView productView = (ProductView)ProductsDataGrid.SelectedItem;
-            Product productToRemove = op1Context.Products.Find(
-                ((Product)(productView).GetModel()).ProductPk, ((Product)(productView).GetModel()).CardPk);
+            Product productToRemove = op1Context.Products.Find( ((Product)(productView).GetModel()).ProductPk,
+                 ((Product)(productView).GetModel()).CardPk );
             op1Context.Entry(productToRemove).Collection(product => product.ProdCalcs).Load();
 
             if(productToRemove.ProdCalcs.Count > 0)
@@ -112,6 +112,7 @@ namespace OP1
                 op1Context.Remove(productToRemove);
             }
 
+            op1Context.SaveChanges();
         }
     }
 }

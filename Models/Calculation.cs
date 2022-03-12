@@ -17,6 +17,5 @@ namespace OP1.Models
         public long CardPk { get; set; }
 
         public virtual Card CardPkNavigation { get; set; }
-        public virtual ProdCalc ProdCalc { get; set; }
     }
 }

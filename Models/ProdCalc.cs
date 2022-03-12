@@ -11,9 +11,6 @@ namespace OP1.Models
         public long CalcFpk { get; set; }
         public long CardFpk { get; set; }
         public long? ProductPk { get; set; }
-        public long? CardPk { get; set; }
-
-        public virtual Calculation Ca { get; set; }
-        public virtual Product Product { get; set; }
+        public long CardPk { get; set; }
     }
 }

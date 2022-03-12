@@ -26,8 +26,7 @@ namespace OP1.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlite("Data Source=D:\\PI-81\\8_semester\\HM_interfaces\\Labs\\Lab4\\OP1\\Database\\OP1.db;");
-                //optionsBuilder.UseSqlite("Data Source=Database\\OP1.db;");
+                optionsBuilder.UseSqlite("Data Source=D:/PI-81/8_semester/HM_interfaces/Labs/Lab4/OP1/Database/OP1.db");
             }
         }
 
@@ -35,14 +34,11 @@ namespace OP1.Models
         {
             modelBuilder.Entity<Calculation>(entity =>
             {
-                entity.HasKey(e => new { e.CalcPk, e.CardPk });
+                entity.HasKey(e => e.CalcPk);
 
                 entity.ToTable("Calculation");
 
-                entity.Property(e => e.CalcPk)
-                    .HasColumnType("bigint")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("CalcPK");
+                entity.Property(e => e.CalcPk).HasColumnName("CalcPK");
 
                 entity.Property(e => e.CardPk)
                     .HasColumnType("bigint")
@@ -76,10 +72,12 @@ namespace OP1.Models
 
                 entity.Property(e => e.CardPk)
                     .HasColumnType("bigint")
-                    .ValueGeneratedOnAdd()
+                    .ValueGeneratedNever()
                     .HasColumnName("CardPK");
 
-                entity.Property(e => e.DateOfDoc).HasColumnType("datetime");
+                entity.Property(e => e.DateOfDoc)
+                    .IsRequired()
+                    .HasColumnType("datetime");
 
                 entity.Property(e => e.Okdp).HasColumnName("OKDP");
 
@@ -90,11 +88,13 @@ namespace OP1.Models
 
             modelBuilder.Entity<ProdCalc>(entity =>
             {
-                entity.HasKey(e => new { e.CalcFpk, e.CardFpk });
+                entity.HasKey(e => e.CardPk);
 
                 entity.ToTable("ProdCalc");
 
                 entity.HasIndex(e => new { e.ProductPk, e.CardPk }, "IX_Relationship4");
+
+                entity.Property(e => e.CardPk).HasColumnName("CardPK");
 
                 entity.Property(e => e.CalcFpk)
                     .HasColumnType("bigint")
@@ -103,10 +103,6 @@ namespace OP1.Models
                 entity.Property(e => e.CardFpk)
                     .HasColumnType("bigint")
                     .HasColumnName("CardFPK");
-
-                entity.Property(e => e.CardPk)
-                    .HasColumnType("bigint")
-                    .HasColumnName("CardPK");
 
                 entity.Property(e => e.Norma).HasColumnType("float");
 
@@ -121,27 +117,15 @@ namespace OP1.Models
                 entity.Property(e => e.Summa)
                     .HasColumnType("NUMERIC")
                     .HasColumnName("summa");
-
-                entity.HasOne(d => d.Ca)
-                    .WithOne(p => p.ProdCalc)
-                    .HasForeignKey<ProdCalc>(d => new { d.CalcFpk, d.CardFpk });
-
-                entity.HasOne(d => d.Product)
-                    .WithMany(p => p.ProdCalcs)
-                    .HasForeignKey(d => new { d.ProductPk, d.CardPk })
-                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Product>(entity =>
             {
-                entity.HasKey(e => new { e.ProductPk, e.CardPk });
+                entity.HasKey(e => e.ProductPk);
 
                 entity.ToTable("Product");
 
-                entity.Property(e => e.ProductPk)
-                    .HasColumnType("bigint")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("ProductPK");
+                entity.Property(e => e.ProductPk).HasColumnName("ProductPK");
 
                 entity.Property(e => e.CardPk)
                     .HasColumnType("bigint")

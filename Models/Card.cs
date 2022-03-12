@@ -21,9 +21,7 @@ namespace OP1.Models
         public string DishNumber { get; set; }
         public string OperName { get; set; }
         public string DocNumber { get; set; }
-        public DateTime? DateOfDoc { get ; set; }
-
-        //public DateTime DateTimeOfDoc { get { return DateTime.Parse(System.Text.Encoding.ASCII.GetString(DateOfDoc));} set { DateOfDoc = value.ToString().ToCharArray(); } }
+        public byte[] DateOfDoc { get; set; }
 
         public virtual ICollection<Calculation> Calculations { get; set; }
         public virtual ICollection<Product> Products { get; set; }
