@@ -96,7 +96,7 @@ namespace OP1
                 };
                 ProductView productView = (ProductView)ProductsDataGrid.SelectedItem;
                 Product productToRemove = op1Context.Products.Find(
-                    ((Product)(productView).GetModel()).ProductPk, ((Product)(productView).GetModel()).CardPk);
+                    ((Product)(productView).GetModel()).ProductPk);
                 op1Context.Entry(productToRemove).Collection(product => product.ProdCalcs).Load();
 
                 if(productToRemove.ProdCalcs.Count > 0)

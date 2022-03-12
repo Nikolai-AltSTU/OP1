@@ -12,7 +12,7 @@ Database: SQLite 3.32
 CREATE TABLE Card
 (
   CardPK INTEGER NOT NULL
-        CONSTRAINT PK_Card PRIMARY KEY,
+        CONSTRAINT PK_Card PRIMARY KEY AUTOINCREMENT,
   OrganizationName TEXT,
   SubOrganization TEXT,
   DishName TEXT,
@@ -31,7 +31,7 @@ CREATE TABLE Card
 CREATE TABLE Product
 (
   ProductPK INTEGER NOT NULL
-        CONSTRAINT PK_Product PRIMARY KEY,
+        CONSTRAINT PK_Product PRIMARY KEY AUTOINCREMENT,
   NameProd TEXT,
   Code int,
   Number int,
@@ -39,7 +39,6 @@ CREATE TABLE Product
   CONSTRAINT Relationship3
     FOREIGN KEY (CardPK)
     REFERENCES Card (CardPK)
-      ON DELETE RESTRICT
 )
 ;
 
@@ -52,7 +51,7 @@ CREATE INDEX IX_Relationship3
 CREATE TABLE Calculation
 (
   CalcPK INTEGER NOT NULL
-        CONSTRAINT PK_Calculation PRIMARY KEY,
+        CONSTRAINT PK_Calculation PRIMARY KEY AUTOINCREMENT,
   numberCalc int,
   dateCalc datetime,
   DishWeght float,
@@ -62,12 +61,14 @@ CREATE TABLE Calculation
   Sostavitel TEXT,
   Rukovoditel TEXT,
   CardPK INTEGER NOT NULL,
-  --CONSTRAINT PK_Calculation PRIMARY KEY (CalcPK,CardPK),
   CONSTRAINT Relationship1
     FOREIGN KEY (CardPK)
     REFERENCES Card (CardPK)
-      ON DELETE CASCADE
 )
+;
+
+CREATE INDEX IX_Relationship1
+  ON Calculation (CardPK)
 ;
 
 -- Table ProdCalc
@@ -78,23 +79,23 @@ CREATE TABLE ProdCalc
   price int,
   summa int,
   ProdCalsPK INTEGER NOT NULL
-        CONSTRAINT PK_ProdCalc PRIMARY KEY,
+        CONSTRAINT PK_ProdCalc PRIMARY KEY AUTOINCREMENT,
   CalcPK INTEGER NOT NULL,
-  CardPK INTEGER NOT NULL,
   ProductPK INTEGER,
-  --CONSTRAINT PK_ProdCalc PRIMARY KEY (ProdCalsPK,CalcPK,CardPK),
   CONSTRAINT Relationship2
-    FOREIGN KEY (CalcPK, CardPK)
-    REFERENCES Calculation (CalcPK, CardPK)
-      ON DELETE CASCADE,
+    FOREIGN KEY (CalcPK)
+    REFERENCES Calculation (CalcPK),
   CONSTRAINT Relationship4
     FOREIGN KEY (ProductPK)
     REFERENCES Product (ProductPK)
-      ON DELETE RESTRICT
 )
 ;
 
 CREATE INDEX IX_Relationship4
   ON ProdCalc (ProductPK)
+;
+
+CREATE INDEX IX_Relationship2
+  ON ProdCalc (CalcPK)
 ;
 

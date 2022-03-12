@@ -10,9 +10,9 @@ namespace OP1.Models
         public long? Summa { get; set; }
         public long ProdCalsPk { get; set; }
         public long CalcPk { get; set; }
-        public long CardPk { get; set; }
         public long? ProductPk { get; set; }
 
+        public virtual Calculation CalcPkNavigation { get; set; }
         public virtual Product ProductPkNavigation { get; set; }
     }
 }

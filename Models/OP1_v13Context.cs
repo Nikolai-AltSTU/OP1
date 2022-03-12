@@ -38,9 +38,9 @@ namespace OP1.Models
 
                 entity.ToTable("Calculation");
 
-                entity.Property(e => e.CalcPk)
-                    .ValueGeneratedNever()
-                    .HasColumnName("CalcPK");
+                entity.HasIndex(e => e.CardPk, "IX_Relationship1");
+
+                entity.Property(e => e.CalcPk).HasColumnName("CalcPK");
 
                 entity.Property(e => e.CardPk).HasColumnName("CardPK");
 
@@ -60,7 +60,8 @@ namespace OP1.Models
 
                 entity.HasOne(d => d.CardPkNavigation)
                     .WithMany(p => p.Calculations)
-                    .HasForeignKey(d => d.CardPk);
+                    .HasForeignKey(d => d.CardPk)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<Card>(entity =>
@@ -69,9 +70,7 @@ namespace OP1.Models
 
                 entity.ToTable("Card");
 
-                entity.Property(e => e.CardPk)
-                    .ValueGeneratedNever()
-                    .HasColumnName("CardPK");
+                entity.Property(e => e.CardPk).HasColumnName("CardPK");
 
                 entity.Property(e => e.DateOfDoc).HasColumnType("datetime");
 
@@ -88,15 +87,13 @@ namespace OP1.Models
 
                 entity.ToTable("ProdCalc");
 
+                entity.HasIndex(e => e.CalcPk, "IX_Relationship2");
+
                 entity.HasIndex(e => e.ProductPk, "IX_Relationship4");
 
-                entity.Property(e => e.ProdCalsPk)
-                    .ValueGeneratedNever()
-                    .HasColumnName("ProdCalsPK");
+                entity.Property(e => e.ProdCalsPk).HasColumnName("ProdCalsPK");
 
                 entity.Property(e => e.CalcPk).HasColumnName("CalcPK");
-
-                entity.Property(e => e.CardPk).HasColumnName("CardPK");
 
                 entity.Property(e => e.Norma).HasColumnType("float");
 
@@ -110,10 +107,14 @@ namespace OP1.Models
                     .HasColumnType("int")
                     .HasColumnName("summa");
 
+                entity.HasOne(d => d.CalcPkNavigation)
+                    .WithMany(p => p.ProdCalcs)
+                    .HasForeignKey(d => d.CalcPk)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+
                 entity.HasOne(d => d.ProductPkNavigation)
                     .WithMany(p => p.ProdCalcs)
-                    .HasForeignKey(d => d.ProductPk)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .HasForeignKey(d => d.ProductPk);
             });
 
             modelBuilder.Entity<Product>(entity =>
@@ -124,9 +125,7 @@ namespace OP1.Models
 
                 entity.HasIndex(e => e.CardPk, "IX_Relationship3");
 
-                entity.Property(e => e.ProductPk)
-                    .ValueGeneratedNever()
-                    .HasColumnName("ProductPK");
+                entity.Property(e => e.ProductPk).HasColumnName("ProductPK");
 
                 entity.Property(e => e.CardPk).HasColumnName("CardPK");
 
@@ -136,8 +135,7 @@ namespace OP1.Models
 
                 entity.HasOne(d => d.CardPkNavigation)
                     .WithMany(p => p.Products)
-                    .HasForeignKey(d => d.CardPk)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .HasForeignKey(d => d.CardPk);
             });
 
             OnModelCreatingPartial(modelBuilder);

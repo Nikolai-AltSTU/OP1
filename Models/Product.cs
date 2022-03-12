@@ -13,8 +13,8 @@ namespace OP1.Models
         public long ProductPk { get; set; }
         public string NameProd { get; set; } = "";
         public long? Code { get; set; } = 0;
-        public long? Number { get; set; } = 1;
-        public long? CardPk { get; set; } = 1;
+        public long? Number { get; set; } = 0;
+        public long? CardPk { get; set; } 
 
         public virtual Card CardPkNavigation { get; set; }
         public virtual ICollection<ProdCalc> ProdCalcs { get; set; }
