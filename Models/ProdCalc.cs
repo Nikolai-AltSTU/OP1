@@ -5,9 +5,9 @@ namespace OP1.Models
 {
     public partial class ProdCalc
     {
-        public double? Norma { get; set; }
-        public long? Price { get; set; }
-        public long? Summa { get; set; }
+        public double? Norma { get; set; } = 0;
+        public long? Price { get; set; } = 0;
+        public long? Summa { get; set; } = 0;
         public long ProdCalsPk { get; set; }
         public long CalcPk { get; set; }
         public long? ProductPk { get; set; }

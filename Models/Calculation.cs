@@ -21,6 +21,18 @@ namespace OP1.Models
         public string Rukovoditel { get; set; }
         public long CardPk { get; set; }
 
+        public double AllCostsPer100Dishes {
+            get { double costs = 0;
+                foreach (var pc in ProdCalcs)
+                {
+                    double? mult = pc.Price * pc.Norma;
+                    if (mult.HasValue)
+                        costs += (double)mult;
+                }
+                return costs; 
+            } 
+        }
+
         public virtual Card CardPkNavigation { get; set; }
         public virtual ICollection<ProdCalc> ProdCalcs { get; set; }
     }

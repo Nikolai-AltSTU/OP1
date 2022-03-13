@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:OP1"
+        xmlns:local="clr-namespace:OP1" xmlns:forms="clr-namespace:OP1.Forms"
         mc:Ignorable="d"
         Title="Калькуляционная карточка" MinHeight="450" MinWidth="700">
     <Grid>
@@ -52,35 +52,38 @@
                         <Button x:Name="AddProduct" Style="{StaticResource InlineButton}" Click="AddProduct_Click">Добавить</Button>
                         <Button x:Name="RemProduct" Style="{StaticResource InlineButton}" Click="RemProduct_Click">Удалить</Button>
                     </StackPanel>
-                    <DataGrid x:Name="ProductsDataGrid" CanUserAddRows="False" >
+                    <DataGrid x:Name="ProductsDataGrid" CanUserAddRows="False" AutoGenerateColumns="False" CanUserSortColumns="False" Width="250">
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="№" ></DataGridTemplateColumn>
-                            <DataGridTextColumn  Header="Наименование" MinWidth="150"></DataGridTextColumn>
-                            <DataGridTextColumn  Header="Код" MinWidth="40"></DataGridTextColumn>
+                            <DataGridTextColumn Header="№" Binding="{Binding Path=Number}" ></DataGridTextColumn>
+                            <DataGridTextColumn Header="Наименование" MinWidth="150" Binding="{Binding Path=Name}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Код" MinWidth="40" Binding="{Binding Path=Code}"></DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </StackPanel>
 
-                <StackPanel Orientation="Vertical" Margin="2,0,0,0">
+                <StackPanel Orientation="Vertical" Margin="2,0,0,0" Width="312">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"></ColumnDefinition>
                             <ColumnDefinition Width="auto"></ColumnDefinition>
                             <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0">Калькуляции</Label>
-                        <StackPanel  Grid.Column="1" Orientation="Horizontal" Name="ButtonsStack">
-                            <Button>Добавить</Button>
-                        </StackPanel>
-                        <Button Grid.Column="2">+</Button>
+
+                        <WrapPanel  Grid.Column="1" Orientation="Horizontal" Name="ButtonsWrapPanel">
+                            <!--forms:CalculationButton></forms:CalculationButton-->
+                        </WrapPanel>
+                        <Button Grid.Column="2" Name="AddCalcButton" Style="{StaticResource InlineButton}" VerticalAlignment="Bottom" Click="AddCalcButton_Click">Добавить</Button>
+                        <Button Grid.Column="3" Name="RemCalcButton" Style="{StaticResource InlineButton}" VerticalAlignment="Bottom" Click="RemCalcButton_Click" >Удалить</Button>
                     </Grid>
 
-                    <DataGrid x:Name="Calculatons" CanUserAddRows="True">
+                    <DataGrid x:Name="CalculationsDataGrid" CanUserAddRows="False" AutoGenerateColumns="False" CanUserSortColumns="False">
                         <DataGrid.Columns>
                             <!--DataGridTemplateColumn Header="№" ></DataGridTemplateColumn-->
-                            <DataGridTextColumn  Header="Норма, кг" MinWidth="100"></DataGridTextColumn>
-                            <DataGridTextColumn  Header="Цена, руб.коп" MinWidth="100"></DataGridTextColumn>
-                            <DataGridTextColumn  Header="Сумма, руб.коп" MinWidth="100" IsReadOnly="True"></DataGridTextColumn>
+                            <DataGridTextColumn  Header="Норма, кг" MinWidth="100" Binding="{Binding Path=Norma}" ></DataGridTextColumn>
+                            <DataGridTextColumn  Header="Цена, руб.коп" MinWidth="100" Binding="{Binding Path=Price}"></DataGridTextColumn>
+                            <DataGridTextColumn  Header="Сумма, руб.коп" MinWidth="100" Binding="{Binding Path=Summa}" IsReadOnly="True"></DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </StackPanel>
@@ -89,11 +92,12 @@
             </StackPanel>
         </ScrollViewer>
 
-        <Border Grid.Row="3">
+        <Border Grid.Row="3" Name="CalculationResultsBorder">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <Label Margin="30,2,0,0" Height="27">Общая стоимость сырьевого набора на 100 блюд</Label>
-                    <TextBox x:Name="AllCostsPer100DishesTextBox" Style="{StaticResource SimpleTextBox}" MinWidth="120" IsReadOnly="True"/>
+                    <TextBox x:Name="AllCostsPer100DishesTextBox" Style="{StaticResource SimpleTextBox}"
+                             Text="{Binding AllCostsPer100Dishes}" MinWidth="120" IsReadOnly="True"/>
                     <Label Margin="0,2,0,0" Height="27">руб.коп</Label>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">

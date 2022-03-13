@@ -66,6 +66,22 @@
             <Setter Property="Padding"  Value="5,0,5,0"/>
         </Style>
 
+        <SolidColorBrush x:Key="NavigationButtonsColor" Color="SkyBlue"></SolidColorBrush>
+        <SolidColorBrush x:Key="ActiveNavigationButtonsColor" Color="RoyalBlue"></SolidColorBrush>
+        <Style x:Key="NavigationButtons">
+            <Setter Property="Control.Background" Value="{StaticResource NavigationButtonsColor}" />
+            <Setter Property="Control.BorderBrush" Value="{StaticResource NavigationButtonsColor}" />
+            <Setter Property="Control.Foreground" Value="Black" />
+            <Setter Property="Control.Margin" Value="0,0,0,0" />
+            <Setter Property="Control.Padding" Value="0,4,0,4" />
+            <Setter Property="Control.FontSize" Value="18" />
+            <Setter Property="Control.FontFamily" Value="Times New Roman" />
+            <Setter Property="Control.FontWeight" Value="Medium" />
+        </Style>
+        <Style x:Key="NavigationButtonsActive" BasedOn="{StaticResource NavigationButtons}">
+            <Setter Property="Control.Background" Value="{StaticResource ActiveNavigationButtonsColor}" />
+        </Style>
+        
     </Application.Resources>
 </Application>
 
