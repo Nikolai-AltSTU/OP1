@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OP1.Models
 {
@@ -12,7 +13,7 @@ namespace OP1.Models
 
         public long CalcPk { get; set; }
         public long? NumberCalc { get; set; }
-        public byte[] DateCalc { get; set; }
+        public DateTime DateCalc { get; set; } = DateTime.Now;
         public double? DishWeght { get; set; }
         public double? ExtraChargePercent { get; set; }
         public long? ExtraChargeMoney { get; set; }
@@ -21,16 +22,56 @@ namespace OP1.Models
         public string Rukovoditel { get; set; }
         public long CardPk { get; set; }
 
-        public double AllCostsPer100Dishes {
-            get { double costs = 0;
+
+        [NotMapped]
+        public double? SellingPrice
+        {
+            get
+            {
+                return ((double)AllCostsPer100Dishes * (1 + ExtraChargePercent / 100) / 100);
+            }
+            set { }
+        }
+
+        [NotMapped]
+        public double? ExtraChargeMoneyView { 
+            get {
+                return (ExtraChargeMoney = ((long?)(AllCostsPer100Dishes * ExtraChargePercent / 100)) / 100);
+            } 
+            set { } 
+        }  
+
+        [NotMapped]
+        public double AllCostsPer100Dishes{
+            get
+            {
+                double costs = 0;
                 foreach (var pc in ProdCalcs)
                 {
                     double? mult = pc.Price * pc.Norma;
                     if (mult.HasValue)
                         costs += (double)mult;
                 }
-                return costs; 
-            } 
+                return costs;
+            }
+        }
+
+        [NotMapped]
+        public double? DishWeihtView
+        {
+            get
+            {
+                if (DishWeght.HasValue == false || DishWeght == 0)
+                {
+                    DishWeght = 0;
+                    foreach (ProdCalc prodCalc in ProdCalcs)
+                    {
+                        DishWeght += prodCalc.Norma * 1000;
+                    }
+                }
+                return DishWeght;
+            }
+            set { DishWeght = value; }
         }
 
         public virtual Card CardPkNavigation { get; set; }

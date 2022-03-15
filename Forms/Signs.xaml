@@ -27,19 +27,19 @@
         <Label MinWidth="400" FontSize="16"  >Укажите ФИО лиц, ответственных за калькуляцию</Label>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Label  Content="Калькуляцию составил" HorizontalAlignment="Left" Margin="40,10,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="Sostavitel"></TextBox>
+            <TextBox x:Name="Sostavitel" Text="{Binding  Sostavitel}"></TextBox>
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <Label Content="Заведующий производством" HorizontalAlignment="Left" Margin="40,10,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="Zaveduushiy"></TextBox>
+            <TextBox x:Name="Zaveduushiy" Text="{Binding  Zaveduushiy}"></TextBox>
         </StackPanel>
         <StackPanel Grid.Row="3" Orientation="Horizontal">
             <Label Content="Руководитель организации" HorizontalAlignment="Left" Margin="40,10,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="Rukovoditel"></TextBox>
+            <TextBox x:Name="Rukovoditel" Text="{Binding  Rukovoditel}"></TextBox>
         </StackPanel>
         <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="20,10,20,10" HorizontalAlignment="Right">
-            <Button x:Name="Cansel" Style="{StaticResource SimpleButton}">Отменить</Button>
-            <Button x:Name="Ok" Style="{StaticResource SimpleButton}">Сохранить</Button>
+            <Button x:Name="Cansel" Style="{StaticResource SimpleButton}" Click="Cansel_Click">Отменить</Button>
+            <Button x:Name="Ok" Style="{StaticResource SimpleButton}" Click="Ok_Click">Сохранить</Button>
         </StackPanel>
 
     </Grid>
