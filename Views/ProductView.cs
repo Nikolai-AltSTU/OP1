@@ -24,6 +24,7 @@ namespace OP1.Views
 
         public long Code { get { return (long)product.Code; } set { product.Code = value; } }
 
-
+        public long Number { get { return (long)product.Number; } set { product.Number = value; } }
+        
     }
 }

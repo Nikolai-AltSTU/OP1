@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace OP1.Models
 {
-    public partial class OP1Context : DbContext
+    public partial class OP1_v13Context : DbContext
     {
-        public OP1Context()
+        public OP1_v13Context()
         {
         }
 
-        public OP1Context(DbContextOptions<OP1Context> options)
+        public OP1_v13Context(DbContextOptions<OP1_v13Context> options)
             : base(options)
         {
         }
@@ -26,7 +26,7 @@ namespace OP1.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlite("Data Source=D:/PI-81/8_semester/HM_interfaces/Labs/Lab4/OP1/Database/OP1.db");
+                optionsBuilder.UseSqlite("Data Source=D:\\PI-81\\8_semester\\HM_interfaces\\Labs\\Lab4\\OP1\\Database\\OP1_v1.3.db;");
             }
         }
 
@@ -38,11 +38,11 @@ namespace OP1.Models
 
                 entity.ToTable("Calculation");
 
+                entity.HasIndex(e => e.CardPk, "IX_Relationship1");
+
                 entity.Property(e => e.CalcPk).HasColumnName("CalcPK");
 
-                entity.Property(e => e.CardPk)
-                    .HasColumnType("bigint")
-                    .HasColumnName("CardPK");
+                entity.Property(e => e.CardPk).HasColumnName("CardPK");
 
                 entity.Property(e => e.DateCalc)
                     .HasColumnType("datetime")
@@ -50,7 +50,7 @@ namespace OP1.Models
 
                 entity.Property(e => e.DishWeght).HasColumnType("float");
 
-                entity.Property(e => e.ExtraChargeMoney).HasColumnType("NUMERIC");
+                entity.Property(e => e.ExtraChargeMoney).HasColumnType("int");
 
                 entity.Property(e => e.ExtraChargePercent).HasColumnType("float");
 
@@ -61,7 +61,7 @@ namespace OP1.Models
                 entity.HasOne(d => d.CardPkNavigation)
                     .WithMany(p => p.Calculations)
                     .HasForeignKey(d => d.CardPk)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<Card>(entity =>
@@ -70,14 +70,9 @@ namespace OP1.Models
 
                 entity.ToTable("Card");
 
-                entity.Property(e => e.CardPk)
-                    .HasColumnType("bigint")
-                    .ValueGeneratedNever()
-                    .HasColumnName("CardPK");
+                entity.Property(e => e.CardPk).HasColumnName("CardPK");
 
-                entity.Property(e => e.DateOfDoc)
-                    .IsRequired()
-                    .HasColumnType("datetime");
+                entity.Property(e => e.DateOfDoc).HasColumnType("datetime");
 
                 entity.Property(e => e.Okdp).HasColumnName("OKDP");
 
@@ -88,35 +83,38 @@ namespace OP1.Models
 
             modelBuilder.Entity<ProdCalc>(entity =>
             {
-                entity.HasKey(e => e.CardPk);
+                entity.HasKey(e => e.ProdCalsPk);
 
                 entity.ToTable("ProdCalc");
 
-                entity.HasIndex(e => new { e.ProductPk, e.CardPk }, "IX_Relationship4");
+                entity.HasIndex(e => e.CalcPk, "IX_Relationship2");
 
-                entity.Property(e => e.CardPk).HasColumnName("CardPK");
+                entity.HasIndex(e => e.ProductPk, "IX_Relationship4");
 
-                entity.Property(e => e.CalcFpk)
-                    .HasColumnType("bigint")
-                    .HasColumnName("CalcFPK");
+                entity.Property(e => e.ProdCalsPk).HasColumnName("ProdCalsPK");
 
-                entity.Property(e => e.CardFpk)
-                    .HasColumnType("bigint")
-                    .HasColumnName("CardFPK");
+                entity.Property(e => e.CalcPk).HasColumnName("CalcPK");
 
                 entity.Property(e => e.Norma).HasColumnType("float");
 
                 entity.Property(e => e.Price)
-                    .HasColumnType("NUMERIC")
+                    .HasColumnType("int")
                     .HasColumnName("price");
 
-                entity.Property(e => e.ProductPk)
-                    .HasColumnType("bigint")
-                    .HasColumnName("ProductPK");
+                entity.Property(e => e.ProductPk).HasColumnName("ProductPK");
 
                 entity.Property(e => e.Summa)
-                    .HasColumnType("NUMERIC")
+                    .HasColumnType("int")
                     .HasColumnName("summa");
+
+                entity.HasOne(d => d.CalcPkNavigation)
+                    .WithMany(p => p.ProdCalcs)
+                    .HasForeignKey(d => d.CalcPk)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasOne(d => d.ProductPkNavigation)
+                    .WithMany(p => p.ProdCalcs)
+                    .HasForeignKey(d => d.ProductPk);
             });
 
             modelBuilder.Entity<Product>(entity =>
@@ -125,11 +123,11 @@ namespace OP1.Models
 
                 entity.ToTable("Product");
 
+                entity.HasIndex(e => e.CardPk, "IX_Relationship3");
+
                 entity.Property(e => e.ProductPk).HasColumnName("ProductPK");
 
-                entity.Property(e => e.CardPk)
-                    .HasColumnType("bigint")
-                    .HasColumnName("CardPK");
+                entity.Property(e => e.CardPk).HasColumnName("CardPK");
 
                 entity.Property(e => e.Code).HasColumnType("int");
 
@@ -137,8 +135,7 @@ namespace OP1.Models
 
                 entity.HasOne(d => d.CardPkNavigation)
                     .WithMany(p => p.Products)
-                    .HasForeignKey(d => d.CardPk)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .HasForeignKey(d => d.CardPk);
             });
 
             OnModelCreatingPartial(modelBuilder);
