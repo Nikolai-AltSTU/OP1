@@ -68,6 +68,10 @@ namespace OP1
                 card = op1Context.Cards.First();
                 op1Context.Entry(card).Collection(c => c.Products).Load();
             }
+            if(card.DocNumber.Length == 0)
+            {
+                card.DocNumber = card.CardPk.ToString();
+            }
             uploadData();
         }
 
@@ -110,15 +114,6 @@ namespace OP1
         #endregion
 
         #region updateTriggers
-        public void updateCalculationContext(object sender, DataGridCellEditEndingEventArgs e)
-        {
-            reassignContext();
-        }
-       
-        public void updateCalculationContext(object sender, SelectedCellsChangedEventArgs e)
-        {
-            reassignContext();
-        }
         private void updateCalculationContext(object sender, EventArgs e)
         { 
             // обрабатывает изменение данных в таблице
@@ -133,6 +128,7 @@ namespace OP1
             CalculationsDataGrid.ItemsSource = prodCalcs;
             CalculationResultsBorder.DataContext = selectedCalculationButton.calculation;
             ExtraChargePercentTextBox.Text = s;
+            selectedCalculationButton.calculation.DateCalc = DateTime.Now;
         }
 
         private void updateCalculationPrice(object sender, TextChangedEventArgs e)
@@ -148,6 +144,11 @@ namespace OP1
             ExtraChargeMoneyTextBox.Text = selectedCalculationButton.calculation.ExtraChargeMoneyView.ToString();
             SellingPriceTextBox.Text = selectedCalculationButton.calculation.SellingPrice.ToString();
             ExtraChargeMoneyTextBox.Text = ExtraChargeMoneyTextBox.Text;
+
+            foreach(Calculation calculation in card.Calculations)
+            {
+                calculation.ExtraChargePercent = persent;
+            }
         }
 
         #endregion
@@ -178,7 +179,6 @@ namespace OP1
         private void UnselectColorBtn(CalculationButton btn) => btn.Style = FindResource("NavigationButtons") as Style;
         private void SelectColorBtn(CalculationButton btn) => btn.Style = FindResource("NavigationButtonsActive") as Style;
 
-
         private void RefreshButtonsWrapPanel()
         {
             ButtonsWrapPanel.Children.Clear();
@@ -192,12 +192,10 @@ namespace OP1
             ButtonsWrapPanel.Visibility = card.Calculations.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
         }
 
-
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
             op1Context.SaveChanges();
         }
-
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             loadDataIntoForm();
@@ -227,7 +225,6 @@ namespace OP1
                 selectCalculation(selectedCalculationButton);
 
         }
-
         private void RemProduct_Click(object sender, RoutedEventArgs e)
         {
             if(ProductsDataGrid.SelectedItems.Count > 1 || ProductsDataGrid.SelectedItems.Count == 0)
@@ -271,7 +268,6 @@ namespace OP1
             ProductsDataGrid.ItemsSource = null;
             ProductsDataGrid.ItemsSource = productViews;
         }
-
         private void AddCalcButton_Click(object sender, RoutedEventArgs e)
         {
             Calculation calculation = new();
@@ -319,10 +315,14 @@ namespace OP1
                         calculation.NumberCalc--;
                 }
                 CalculationButtons.RemoveAt((int)number-1);
-                if (number > 0)
+                if (number > 1)
                     selectCalculation(CalculationButtons[(int)Math.Max(number-2, 0)]);
                 else
+                {
                     selectedCalculationButton = null;
+                    CalculationsDataGrid.ItemsSource = null;
+                }
+                    
                 RefreshButtonsWrapPanel();
             }
 
@@ -443,7 +443,8 @@ namespace OP1
                         // итого, подписи           
                                                                 //14
                         worksheet.Rows[row_index_summ].Cells[col_index + 5].Text = calculation.AllCostsPer100Dishes.ToString();
-                        worksheet.Rows[row_index_summ + 1].Cells[col_index].Text = calculation.ExtraChargePercent.ToString() + ", " + calculation.ExtraChargeMoneyView.ToString(); ///????
+                        worksheet.Rows[row_index_summ + 1].Cells[col_index].Text = calculation.ExtraChargeMoneyView.ToString();
+                        worksheet.Rows[row_index_summ + 1].Cells[3].Text = calculation.ExtraChargePercent.ToString(); 
                         worksheet.Rows[row_index_summ + 3].Cells[col_index].Text = calculation.SellingPrice.ToString();
                         worksheet.Rows[row_index_summ + 4].Cells[col_index].Text = calculation.DishWeihtView.ToString();
 
@@ -451,6 +452,7 @@ namespace OP1
                         worksheet.Rows[row_index_summ + 6].Cells[col_index].Text = calculation.Sostavitel;
                         worksheet.Rows[row_index_summ + 7].Cells[col_index].Text = calculation.Rukovoditel;
 
+                        
                         col_index += col_index_step;
                     }
                     workbook.SaveAs(saveFileDialog.FileName);

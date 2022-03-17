@@ -5,14 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OP1" xmlns:forms="clr-namespace:OP1.Forms"
         mc:Ignorable="d"
-        Title="Калькуляционная карточка" MinHeight="450" MinWidth="700">
+        Title="Калькуляционная карточка" MinHeight="650" MinWidth="750">
     <Grid>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="40" ></RowDefinition>
             <RowDefinition Height="100" x:Name="Header"></RowDefinition>
             <RowDefinition></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition MinHeight="140" MaxHeight="170"></RowDefinition>
             <RowDefinition MaxHeight="50" ></RowDefinition>
         </Grid.RowDefinitions>
         <StackPanel x:Name="HeadingStack" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" >
@@ -26,9 +26,11 @@
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
                     <TextBox x:Name="OrganizationNameTextBox" Text="{Binding OrganizationName}" Style="{StaticResource placeHolder}" Tag="Организация" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" />
-                    <Label Margin="150,2,-20,0" Height="27">Форма</Label>
-                    <TextBox x:Name="OKUDTextBox" Text="{Binding Okud}" Style="{StaticResource placeHolder}" Tag="по ОКУД" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="60" />
-                    <TextBox x:Name="OKPOTextBox" Text="{Binding Okpo}" Style="{StaticResource placeHolder}" Tag="по ОКПО" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="60" />
+                    <Label Height="27" Content="ОКПО" Margin="25,5,-20,0
+                           "/>
+                    <TextBox x:Name="OKPOTextBox" Text="{Binding Okpo}" Style="{StaticResource placeHolder}" Tag="по ОКПО" TextWrapping="Wrap" MinWidth="60" />
+                    <Label Margin="170,2,-20,0" Height="27">Форма</Label>
+                    <TextBox x:Name="OKUDTextBox" Text="{Binding Okud}" Style="{StaticResource placeHolder}" IsReadOnly="True"  Tag="по ОКУД" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="60" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBox x:Name="SubOrganizationTextBox" Text="{Binding SubOrganization}" Style="{StaticResource placeHolder}" Tag="Структурное подразделение" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" />
@@ -37,14 +39,16 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBox x:Name="DishNameTextBox" Text="{Binding DishName}" Style="{StaticResource placeHolder}" Tag="Наименование блюда" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" />
+                    <Label Height="27" Content="№" Margin="30,0,-30,-5"/>
                     <TextBox x:Name="DishNumberTextBox" Text="{Binding DishNumber}" Style="{StaticResource placeHolder}" Tag="№ блюда по сборнику рецептур, ТТК, СТП" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="70" />
+                    <Label Height="27" Content="Вид операции" Margin="30,0,-30,-5"/>
                     <TextBox x:Name="OperationNameTextBox" Text="{Binding OperName}" Style="{StaticResource placeHolder}" Tag="Вид операции" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="70" />
                 </StackPanel>
             </StackPanel>
         </Border>
 
         <ScrollViewer Grid.Row="2" Margin="30,5,5,5" MinHeight="200">
-            
+
             <StackPanel Orientation="Horizontal">
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal">
@@ -52,10 +56,10 @@
                         <Button x:Name="AddProduct" Style="{StaticResource InlineButton}" Click="AddProduct_Click">Добавить</Button>
                         <Button x:Name="RemProduct" Style="{StaticResource InlineButton}" Click="RemProduct_Click">Удалить</Button>
                     </StackPanel>
-                    <DataGrid x:Name="ProductsDataGrid" CanUserAddRows="False" AutoGenerateColumns="False" CanUserSortColumns="False" Width="250">
+                    <DataGrid x:Name="ProductsDataGrid" CanUserAddRows="False" AutoGenerateColumns="False" CanUserSortColumns="False" Width="265">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="№" Binding="{Binding Path=Number}" ></DataGridTextColumn>
-                            <DataGridTextColumn Header="Наименование" MinWidth="150" Binding="{Binding Path=Name}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Наименование" MinWidth="190" Binding="{Binding Path=Name}"></DataGridTextColumn>
                             <DataGridTextColumn Header="Код" MinWidth="40" Binding="{Binding Path=Code}"></DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
@@ -72,7 +76,6 @@
                         <Label Grid.Column="0">Калькуляции</Label>
 
                         <WrapPanel  Grid.Column="1" Orientation="Horizontal" Name="ButtonsWrapPanel">
-                            <!--forms:CalculationButton></forms:CalculationButton-->
                         </WrapPanel>
                         <Button Grid.Column="2" Name="AddCalcButton" Style="{StaticResource InlineButton}" VerticalAlignment="Bottom" Click="AddCalcButton_Click">Добавить</Button>
                         <Button Grid.Column="3" Name="RemCalcButton" Style="{StaticResource InlineButton}" VerticalAlignment="Bottom" Click="RemCalcButton_Click" >Удалить</Button>
@@ -81,9 +84,7 @@
                     <DataGrid x:Name="CalculationsDataGrid" CanUserAddRows="False" AutoGenerateColumns="False"
                               CanUserSortColumns="False" CurrentCellChanged="updateCalculationContext">
                         <DataGrid.Columns>
-                            <!--DataGridTemplateColumn Header="№" ></DataGridTemplateColumn-->
-                            <DataGridTextColumn  Header="Норма, кг" MinWidth="100" Binding="{Binding Path=Norma}"
-                                                ></DataGridTextColumn>
+                            <DataGridTextColumn  Header="Норма, кг" MinWidth="100" Binding="{Binding Path=Norma}"></DataGridTextColumn>
                             <DataGridTextColumn  Header="Цена, руб.коп" MinWidth="100" Binding="{Binding Path=PriceDouble}"></DataGridTextColumn>
                             <DataGridTextColumn  Header="Сумма, руб.коп" MinWidth="100" Binding="{Binding Path=SummaDouble, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"></DataGridTextColumn>
                         </DataGrid.Columns>

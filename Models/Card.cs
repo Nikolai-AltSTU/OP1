@@ -15,7 +15,7 @@ namespace OP1.Models
         public string OrganizationName { get; set; }
         public string SubOrganization { get; set; }
         public string DishName { get; set; }
-        public string Okud { get; set; }
+        public string Okud { get; set; } = "0330501";
         public string Okpo { get; set; }
         public string Okdp { get; set; }
         public string DishNumber { get; set; }
